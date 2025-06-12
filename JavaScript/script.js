@@ -27,12 +27,12 @@ function mostrarDatos(datos){
         tabla.innerHTML += `
         <tr>
             <td>${integrante.id}</td>
-            <td>${integrante.nombre}</td>
-            <td>${integrante.apellido}</td>
-            <td>${integrante.correo}</td>
+            <td>${integrante.Nombre}</td>
+            <td>${integrante.Apellido}</td>
+            <td>${integrante.Correo}</td>
             <td> 
-               <button>Editar</button>
-               <button onClick = "eliminarPersona(${integrante.id})">Eliminar</button>
+               <button onclick = "AbrirModalEditar('${integrante.id}', '${integrante.Nombre}', '${integrante.Apellido}', '${integrante.Correo}')">Editar</button>
+               <button onClick = "EliminarPersona(${integrante.id})">Eliminar</button>
             </td>
         </tr>
         `;
@@ -41,7 +41,6 @@ function mostrarDatos(datos){
   
 }
 obtenerIntegrantes();
-
 
 //Proceso para agregar un nuevo integrante
 const modal = document.getElementById("md-agregar")//Cuadro de dialogo
@@ -96,16 +95,12 @@ document.getElementById("frmAgregar").addEventListener("submit", async e => {
         //En caso de que la API devuelva un codigo diferente a 200-29900
         alert("El registro no fue agregado");
     }
-
-    
-
-
 });
 
 
 
 //Funcion para borrar registros
-async function eliminarPersona(id){
+async function EliminarPersona(id){
     const confirmacion = confirm("Realmente deseas eliminar el registro?")
 
 
@@ -119,3 +114,51 @@ async function eliminarPersona(id){
     //Recargar la tabla despues de eliminar los registros
     obtenerIntegrantes();
 }
+
+//Proceso para editar un registro
+const modalEditar = document.getElementById("md-editar")
+const btnCerrarEditar = document.getElementById("btnCerrarEditar")
+
+btnCerrarEditar.addEventListener("click", ()=>{
+    modalEditar.close()
+});
+
+function AbrirModalEditar(id, nombre, apellido, correo){
+    document.getElementById("txtIdEditar").value = id;
+    document.getElementById("txtNombreEditar").value = nombre;
+    document.getElementById("txtApellidoEditar").value = apellido;
+    document.getElementById("txtEmailEditar").value = correo;
+
+    modalEditar.showModal();
+}
+
+document.getElementById("frmEditar").addEventListener("submit", async e => {
+    e.preventDefault();
+    const id = document.getElementById("txtIdEditar").value;
+    const Nombre = document.getElementById("txtNombreEditar").value.trim();
+    const Apellido = document.getElementById("txtApellidoEditar").value.trim();
+    const Correo = document.getElementById("txtEmailEditar").value.trim();
+
+    if(!id || !Nombre || !Apellido  || !Correo)
+    {
+        alert("Complete todos los campos");
+        return;
+    }
+
+    const respuesta = await fetch(`${API_URL}/${id}`, {
+            method: "PUT",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({Correo, Nombre, Apellido})
+        });
+
+        if(respuesta.ok)
+        {
+            alert("El registro fue actualizado con exito");
+            modalEditar.close();
+            obtenerIntegrantes();
+        }
+        else
+        {
+            alert("El registro no pudo ser actualizado")
+        }
+    });

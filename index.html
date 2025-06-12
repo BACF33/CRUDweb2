@@ -58,7 +58,25 @@
                 <input type="text" id="txtApellido" placeholder="Apellido" required>
                 <input type="text;" id="txtCorreo" placeholder="Correo Electronico" required>
                 
-                <button type="submit" class="contrast" id = "btnGuardar">Guardar</button>
+                <button type="submit" class="contrast" id = "btnActualizar">Guardar</button>
+            </form>
+        </article>
+    </dialog>
+
+    <!--El modal o dialog aparece frente al contenido-->
+    <dialog id="md-editar">     
+        <article>
+            <header>
+                <a href="#" class="close" id="btnCerrarEditar"></a>
+                <h3>Editar Integrante</h3>
+            </header>
+            <form id="frmEditar">
+                <input type="hidden" id="txtIdEditar">
+                <input type="text" id="txtNombreEditar" placeholder="Nombre" required>
+                <input type="text" id="txtApellidoEditar" placeholder="Apellido" required>
+                <input type="text;" id="txtEmailEditar" placeholder="Correo Electronico" required>
+                
+                <button type="submit" class="contrast" id = "btnGuardar">Actualizar</button>
             </form>
         </article>
     </dialog>
